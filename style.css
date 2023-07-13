@@ -1,0 +1,344 @@
+/* :root = prend en compte les variables suivantes (par exemple --color1) */
+:root { 
+  --color1: #ede4d0;
+  --color2: pink;
+  --color3: #393b4b;
+  --color4: rgb(18, 19, 19);
+}
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  /* Le box-sizing va nous aider à mieux arranger nos boîtes */
+}
+body {
+  /* Background met l'image en fond. Le center/cover place l'image sur toute la page mais elle se répète. Le height: 100vh; permet de mettre l'image à 100% sur toute la page */
+  background: url(./bg.jpg) center/cover; 
+  height: 100vh;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  /* color: var prend la variable -color1 en valeur */
+  color: var(--color1);
+  /* Display: flex; et align-items: center; : aligne les éléments verticalement */
+  display: flex;
+  align-items: center;
+  /* Justify-content:center : Aligne verticalement */
+  justify-content: center;
+  /* overflow: hidden; => Tout ce qui dépasse tu le caches. Donc notre page n'est plus cassée à cause du vaisseau */
+  overflow: hidden;
+}
+.card {
+  background: rgba(0, 0, 0, 0.507);
+  /* calc : fais moi un calcul (100% de taille - 50px */
+  width: calc(100% - 50px);
+  padding: 20px 20px 6px;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.521);
+  border-radius: 5px;
+  /* backdrop-filter: blur(5px); => Tout ce qui a derrière la boîte, tu mets 5px de flou */
+  backdrop-filter: blur(5px);
+}
+/* .card:before sert à mettre tous les éléments avant la classe card */
+.card:before {
+  /* content: "\2730"; fait apparaître une icone d'étoile (code de l'étoile sur toptal.com => \2730) */
+  content: "\2730";
+  position: absolute;
+  top: 14px;
+  right: 20px;
+  /* font-size: 2.4rem; => Pour aggrandir l'icone étoile */
+  font-size: 2.4rem;
+}
+h1 {
+  margin-bottom: 24px;
+  /* On met une position relative pour que le h1::after soit juste en dessous de H1 (le h1::after est une barre horizontale) */
+  position: relative;
+}
+/* h1::after permet de mettre tous les éléments après le H1 */
+h1::after {
+  /* Le content, on est obligé de le mettre, sinon notre before ou notre after ne marchera pas. Là on le laisse vide car on ne veut rien noter après. C'est juste une barre horizontale */
+  content: "";
+  position: absolute;
+  background: var(--color2);
+  height: 1px;
+  width: 100%;
+  bottom: -14px;
+  /* left pour centrer horizontalement mais ça prend seulement par rapport au coin gauche de notre élément*/
+  left: 50%;
+  /* Là on fait en sorte de centrer par rapport au centre de notre élément */
+  transform: translateX(-50%) scaleX(0);
+  /* L'animation dure 6s. Elle part du centre jusqu'aux côtés (transform-origin: centre;) et tu restes comme ça à la fin (tu ne disparais pas) => forwards. ease-in: lent au début, rapide/brutal à la fin. ease-out: rapide/brutal au début, lent à la fin */
+  animation: h1anim 6s ease-in-out forwards;
+  transform-origin: centre;
+}
+/* @keyframes => Animation. Le h1anim est le nom de l'animation  */
+@keyframes h1anim {
+  /* 100% => A la fin de l'animation tu es à 1 */
+  100% {
+    transform: translateX(-50%) scaleX(1);
+  }
+}
+.grid-container {
+  display: grid;
+  /* grid-template-columns: 20% 80%; => dimensions du premier (le polygon prend 20%) et du second enfant (le <p> prend 80%) */
+  grid-template-columns: 20% 80%;
+}
+.polygon-container {
+  /* C'est le parent de polygon qui permet de lui mettre une ombre */
+  filter: drop-shadow(-1px 6px 3px var(--color2));
+  /* Mettre le parent en grid. Permet de centrer le polygon sur l'axe Y. Le left met le polygon vers la gauche (axe des z) */
+  place-self: center left;
+}
+/* bennettfeely.com/clippy/ => Sur ce site, on peut choisir et modifier des formes qu'on peut ensuite coller dans notre code (c'est le clip-path:) */
+.polygon {
+  clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+/* cssgradient.io permet de créer des gradients et d'en prendre le code pour l'intégrer dans notre code. Là il ne l'a pas utilisé. Il a utilisé les variables de ses couleurs  */
+/* webgradients.com => permet de choisir un gradient tout fait et stylé */
+  background: linear-gradient(135deg, var(--color2) 0%, var(--color1) 100%);
+  height: 100px;
+  width: 100px;
+}
+/* après le polygon (donc dedans) */
+.polygon:after {
+  content: "Un texte";
+  position: absolute;
+  color: var(--color2);
+  background: var(--color4);
+  /* Top et Left permettent de centrer mais que par rapport au coin en haut à gauche de l'élement */
+  top: 50%;
+  left: 50%;
+  /* Transform: translate(-50%, -50%) permet de recentrer l'élément par rapport à son centre. rotate(344deg) permet d'incliner l'élément (On va directement dans les styles, on clique sur l'horloge après le transform: translate(-%, -%) rotate et on peut régler l'inclinaison de manière visuelle */
+  transform: translate(-50%, -50%) rotate(344deg);
+  width: 90px;
+  padding: 4px;
+  text-align: center;
+}
+p {
+  /* line-height: 26px; => Paramètre l'espacement entre les lignes*/
+  line-height: 26px;
+  margin: 20px 0;
+  /* -webkit-box; => Tu ne me mets que 4 ligne */
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 4;
+  /* Et tout ce qu'il y a en dessous de ces quatres lignes tu me le caches */
+  overflow: hidden;
+  /* Jutifie le texte comme sur Word */
+  text-align: justify;
+}
+/* Le p::selection sert à modifier la couleur du background et du texte quand on sélectionne le texte */
+p::selection {
+  background: var(--color2);
+  color: var(--color3);
+}
+.checkbox-container {
+  display: flex;
+  /* space-around => Réparti beaucoup mieux les choses en les centrant */
+  justify-content: space-around;
+  margin: 20px 0 30px;
+  /* Ne pas oublier la perspective pour l'animation 3D de l'Option2 */
+  perspective: 30px;
+}
+/* input[type="checkbox"] => C'est le type d'input qu'on veut pointer */
+input[type="checkbox"] {
+  /* display: none; => Cache les cases à cocher à côté de Option 1,2 et 3. On peut maintenant cliquer directement les encadrés "option" */
+  display: none;
+}
+/* Le :checked arrive à voir si c'est checké ou pas. Cela disparît et réaparait (dans les options). Si on rajoute le label, ça change la couleur de l'élément qu'on coche */
+input[type="checkbox"]:checked + label {
+  background: var(--color2);
+  color: var(--color3);
+  /* transform: scale(1.1); => En cliquant sur le bouton, tu le grossis de 10% */
+  transform: scale(1.1);
+  /* cssgenerator.org/filter-css-generator.html => Sert à rajouter des filtres sur ses éléments */
+  /* filter: brightness(120%); => Sert à augmenter la luminosité des boutons de 120% */
+  filter: brightness(120%);
+}
+label {
+  /* pointer pour montrer que c'est cliquable */
+  cursor: pointer;
+  border: 1px solid var(--color1);
+  background: var(--color3);
+  padding: 10px;
+  border-radius: 5px;
+  transition: 0.2s;
+  /* user-select: none; => On ne peut plus sélectionner le texte dans les options */
+  user-select: none;
+}
+/* Le premier label que tu vois, je veux qu'il ait le style suivant (quand il est survolé) */
+label:first-of-type:hover {
+  /* infinite linear => L'animation se lance à l'infini au survol */
+  animation: label1 1s infinite linear;
+}
+@keyframes label1 {
+  /* A la moitié de ton animation, tu grossis de 20% */
+  50% {
+    transform: scale(1.2);
+  }
+  /* Et à la fin tu reviens à la normale */
+  100% {
+    transform: scale(1);
+  }
+}
+/* :nth-child(4) => Le label 2 (Option2), c'est mon quatrième enfant */
+label:nth-child(4):hover {
+  animation: label2 3s infinite linear;
+}
+/* Ne pas oublier perspective sur le parent */
+@keyframes label2 {
+  /* A un tiers de l'animation */
+  33% {
+    /* translateZ => Pour un truc en 3D */
+    transform: translateZ(30px);
+  }
+  66% {
+    transform: translateZ(-40px);
+  }
+  100% {
+    transform: translateZ(0);
+  }
+}
+.e-mail {
+  text-align: center;
+  margin-bottom: 20px;
+}
+/* Je sélectionne seulement l'input qui dans "e-mail" */
+.e-mail input {
+  padding: 10px;
+  border-radius: 5px;
+  outline: none;
+  border: 3px solid transparent;
+  transition: 0.3s;
+  /* text-align: center; => On écrit au centre du bloc quand on tape son e-mail */
+  text-align: center;
+  font-size: 1.1rem;
+  color: var(--color1);
+  min-width: 180px;
+  /* On met une taille dynamique en pourcentage. Tant que le bloc email est entre 180px et 300px il va s'allonger ou se rétécir de 35%. En dessous ou au dessus ça ne bouge pas. */
+  width: 35%;
+  max-width: 300px;
+}
+/* Quand on est sur l'input de type text (l'email) (ce que veut dire le :focus), son background change, ses bordures et ses coins aussi */
+input[type="text"]:focus {
+  background: transparent;
+  border: 3px solid var(--color2);
+  border-radius: 150px;
+}
+/* ::placeholder modifie ce qu'il y a à l'intérieur de notre saisie d'email */
+input[type="text"]::placeholder {
+  color: var(--color2);
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+}
+button {
+  cursor: pointer;
+  background: var(--color2);
+  border: none;
+  font-size: 1.3rem;
+  padding: 10px 20px;
+  border-radius: 150px;
+  /* margin: 0 auto; => Sert à centrer le bouton. Mais il faut rajouter display: block; pour que ça marche */
+  margin: 0 auto;
+  display: block;
+  transition: 0.1s;
+}
+button:hover {
+  /* On va écarter les lettres de 3px quand on va survoler le bouton (:hover) */
+  letter-spacing: 3px;
+}
+/* :active => Quand on a cliqué dessus */
+button:active {
+  /* Quand on a cliqué dessus, le boutton augmente de 20% */
+  transform: scale(1.2);
+}
+/* Quand je fais un :hover du button, je veux que le "a" ait le comportement suivant */
+button:hover + a,
+/* Et quand on survole le "a" (le lien), il a le même comportement qu'en dessous */
+a:hover {
+  /* Au survol du bouton valider, l'opacité du lien (conditions générales de vente) repasse à 1, il n'est plus caché et sa position revient en haut (juste en dessous du bouton valider) */
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+/* Notre a c'est notre lien Google dans le HTML */
+a {
+  color: var(--color2);
+  text-align: center;
+  display: block;
+  opacity: 0;
+  /* visibility: hidden; => On ne voit plus le lien quand on le survole */
+  visibility: hidden;
+  transform: translateY(20px);
+  transition: 0.3s;
+}
+/* Quand le lien a été visité, il change de couleur */
+a:visited {
+  color: var(--color1);
+}
+/* C'est le vaisseau "spaceship.png" */
+img {
+  height: 40px;
+  position: absolute;
+  /* On rajoute une ombre, un filtre qui va donner l'impression d'un halo quand notre vaisseau va bouger */
+  filter: drop-shadow(0px 6px 3px rgba(255, 255, 0, 0.6));
+  /* Le z-index nous permet de mettre le vaisseau en arrière-plan (-1) */
+  z-index: -1;
+  animation: spaceship 60s infinite linear;
+}
+/* Tout ça c'est pour la position, l'orientation et les mouvements du vaisseau */
+@keyframes spaceship {
+  /* On met de 10% en 10% */
+  0% {
+    /* position */
+    top: 2%;
+    left: 2%;
+  /* rotation */
+    transform: rotate(90deg);
+  }
+  10% {
+    top: 6%;
+    left: 30%;
+    transform: rotate(95deg);
+  }
+  20% {
+    top: 9%;
+    left: 60%;
+    transform: rotate(60deg);
+  }
+  30% {
+    top: 0%;
+    left: 80%;
+    transform: rotate(90deg);
+  }
+  40% {
+    top: 20%;
+    left: 120%;
+    transform: rotate(110deg);
+  }
+  50% {
+    top: 50%;
+    left: 80%;
+    transform: rotate(323deg);
+  }
+  60% {
+    top: 90%;
+    left: 90%;
+    transform: rotate(256deg);
+  }
+  70% {
+    top: 110%;
+    left: 50%;
+    transform: rotate(237deg);
+  }
+  80% {
+    top: 85%;
+    left: 30%;
+    transform: rotate(323deg);
+  }
+  90% {
+    top: 50%;
+    left: 15%;
+    transform: rotate(350deg);
+  }
+  100% {
+    top: 2%;
+    left: 2%;
+    transform: rotate(90deg);
+  }
+}
